@@ -1,0 +1,28 @@
+{
+	"info": {
+		"_postman_id": "e34f3fd6-c74d-47b1-b14d-176c15037bf6",
+		"name": "Tread MVP Mailer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:5000/submit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"items\": [\r\n        {\r\n            \"excerciseName\": \"HIIT\",\r\n            \"reps\": \"10\",\r\n            \"time\": \"0\",\r\n            \"rest\": \"30\",\r\n            \"excerciseGIF\": \"www.youtube.com/asfdwrgf\"\r\n        }\r\n    ],\r\n    \"mail\": \"karthicksivacharan@gmail.com\",\r\n    \"timerName\": \"HIIT Test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:5000/submit"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
