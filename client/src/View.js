@@ -6,13 +6,14 @@ import "./App.css";
 import Plyr from "react-plyr";
 
 const View = (props) => {
-  var repsunit = null,
+  var 
+  // repsunit = null,
     timeunit = null,
     restunit = null,
     setsunit=null;
-  if (props.data.reps !== "") {
-    repsunit = " Reps  ";
-  }
+  // if (props.data.reps !== "") {
+  //   repsunit = " Reps  ";
+  // }
   if (props.data.time !== "") {
     timeunit = " (sec) Time  ";
   }
@@ -64,8 +65,8 @@ const View = (props) => {
         </div>
         <Card.Content>
           <div>
-            <span className="data" style={{marginLeft:"4px"}}>{props.data.reps}</span>
-            <span className="unit" >{repsunit}</span>
+            {/* <span className="data" style={{marginLeft:"4px"}}>{props.data.reps}</span>
+            <span className="unit" >{repsunit}</span> */}
             <span className="data" style={{marginLeft:"4px"}}>{props.data.time}</span>
             <span className="unit">{timeunit}</span>
             <span className="data" style={{marginLeft:"4px"}}>{props.data.rest}</span>
@@ -73,6 +74,7 @@ const View = (props) => {
             <span className="data" style={{marginLeft:"4px"}}>{props.data.sets}</span>
             <span className="unit">{setsunit}</span>
           </div>
+          <div><span className="data" style={{marginLeft:"4px"}}>{props.data.Instruction}</span></div>
 
           {/* <br /> */}
         </Card.Content>
