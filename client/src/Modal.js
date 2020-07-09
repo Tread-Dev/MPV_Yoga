@@ -3,9 +3,12 @@ import "./Modal.css";
 import View from "./View";
 import axios from "axios";
 import Plyr from "react-plyr";
+
 import { Embed } from "semantic-ui-react";
 import ReactPlayer from "react-player";
 import { exercise } from "./Data.js";
+import DraggableList from "react-draggable-lists";
+import {arrayMove} from "array-move";
 import {
   Dropdown,
   Popup,
@@ -22,12 +25,15 @@ import {
   Label,
   Loader,
 } from "semantic-ui-react";
+import DragList from './DragAndDrop'
 import GridList from "@material-ui/core/GridList";
-import { StepContent } from "@material-ui/core";
+import { SortableElement, SortableContainer } from "react-sortable-hoc";
+
 // import { DndProvider } from "react-dnd";
 // import { HTML5Backend } from "react-dnd-html5-backend";
-// import DraggableList from "react-draggable-lists";
+
 // import DragDrop from "./DragAndDrop";
+
 
 const style = {
   content: {
@@ -85,6 +91,47 @@ const Modalcall = (props) => {
   const [editingExerciseName, seteditingExerciseName] = useState(false);
   const [picked, setPicked] = useState(false);
   const [added, setAdded] = useState(false);
+
+
+ 
+  const Item = SortableElement(({ item,index }) =>  
+  <div className="view">
+  <View
+ key={index}
+ id={index}
+ data={item}
+ onSelect={deleteItem}
+ onEdit={callEdit}
+ videoId={item.videoId}
+ onCopy={callCopy}
+ />
+ </div>
+ );
+ const ItemContainer = SortableContainer(({ items }) => (
+   <ul>
+      {items.map((item, index) => (
+              
+              <Item key={index} index={index} item={item} />
+                 
+              
+      ))}
+   </ul>
+ ));
+
+function toggleItemState(item) {
+  const updatedItems = Items.map(currentItem => ({
+    ...currentItem,
+    selected:
+      currentItem.name === item ? !currentItem.selected : currentItem.selected
+  }));
+
+  addList(updatedItems);
+}
+
+function onSortEnd({ oldIndex, newIndex }) {
+  const updatedItems = arrayMove(Items, oldIndex, newIndex);
+  addList(updatedItems);
+}
 
   // console.log(Data[0].key);
   // const [disablebutton,setDisablebutton]=useState(true);
@@ -289,6 +336,7 @@ const Modalcall = (props) => {
       noUpdate === true &&
       check(rest, time, Instruction, excerciseName, sets) === true
     ) {
+      
       addList((oldItems) => {
         return [
           ...oldItems,
@@ -536,6 +584,7 @@ const Modalcall = (props) => {
     excerciseNameValue = excerciseName;
   }
 
+
   return (
     <div>
       <Modal
@@ -719,9 +768,15 @@ const Modalcall = (props) => {
         </Grid.Row>
 
         {/* /////////////////////////////////////// Card Print//////////////////////////////////////////////// */}
-        <Grid.Row style={{ marginLeft: "2.5%" }}>
+        
+        {/* <Grid.Row style={{ marginLeft: "2.5%" }}>
           <GridList spacing={20} cellHeight={320} cols="md">
-            {Items.map((item, index) => {
+           */}
+          
+          <ItemContainer items={Items} onSortEnd={onSortEnd} />
+
+
+            {/* {Items.map((item, index) => {
               return (
                 <div className="view">
                   <View
@@ -735,7 +790,8 @@ const Modalcall = (props) => {
                   />
                 </div>
               );
-            })}
+            })} */}
+            
             <Button
               onClick={twomethod}
               icon="add"
@@ -746,9 +802,10 @@ const Modalcall = (props) => {
                 marginTop: 110,
               }}
             ></Button>
-          </GridList>
-        </Grid.Row>
-
+            
+          {/* </GridList>
+        </Grid.Row> */}
+        
         {/* /////////////////////////////////////// Card Print//////////////////////////////////////////////// */}
 
         <Grid.Row>
@@ -853,4 +910,5 @@ const Modalcall = (props) => {
     </div>
   );
 };
+
 export default Modalcall;

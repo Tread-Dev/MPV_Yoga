@@ -4,7 +4,8 @@ import './App.css';
 import Navbar from './Navbar'
 import ReactTour from './Tour';
 import Demo from './Demo';
-
+import DraggableList from "react-draggable-lists";
+import DragList from "./DragAndDrop.js";
 function App() {
  
   return (
@@ -13,7 +14,11 @@ function App() {
       
       <Navbar/>
       {/* <ReactTour/> */}
+  
+     
       <Modal/>
+          
+      <DragList/>
       
     </div>
   );
