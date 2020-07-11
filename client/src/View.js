@@ -23,6 +23,7 @@ const View = (props) => {
   if(props.data.sets!==""){
     setsunit=" Set "
   }
+  // console.log(props.id.id);
 
   return (
     <div>
@@ -75,6 +76,7 @@ const View = (props) => {
             <span className="unit">{setsunit}</span>
           </div>
           <div><span className="data" style={{marginLeft:"4px"}}>{props.data.Instruction}</span></div>
+          <div><span className="data" style={{marginLeft:"4px"}}>{"ID "+ props.id }</span></div>
 
           {/* <br /> */}
         </Card.Content>

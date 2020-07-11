@@ -3,12 +3,12 @@ import "./Modal.css";
 import View from "./View";
 import axios from "axios";
 import Plyr from "react-plyr";
-
+import Gallery from "react-photo-gallery";
 import { Embed } from "semantic-ui-react";
 import ReactPlayer from "react-player";
 import { exercise } from "./Data.js";
 import DraggableList from "react-draggable-lists";
-import {arrayMove} from "array-move";
+import arrayMove from "array-move";
 import {
   Dropdown,
   Popup,
@@ -25,7 +25,7 @@ import {
   Label,
   Loader,
 } from "semantic-ui-react";
-import DragList from './DragAndDrop'
+import DragList from "./DragAndDrop";
 import GridList from "@material-ui/core/GridList";
 import { SortableElement, SortableContainer } from "react-sortable-hoc";
 
@@ -33,7 +33,6 @@ import { SortableElement, SortableContainer } from "react-sortable-hoc";
 // import { HTML5Backend } from "react-dnd-html5-backend";
 
 // import DragDrop from "./DragAndDrop";
-
 
 const style = {
   content: {
@@ -63,6 +62,7 @@ const Modalcall = (props) => {
   const [sets, setSets] = useState("");
   const [excerciseName, setName] = useState("");
   const [Items, addList] = useState([]);
+
   const [video, setVideo] = useState("");
   const [modalIsOpen, setModalIsopen] = useState(false);
   const [modalIsOpen2, setModalIsopen2] = useState(false);
@@ -75,7 +75,10 @@ const Modalcall = (props) => {
   const [response, setResponse] = useState("");
   const [timerName, setWorkoutName] = useState("");
   const [timerDescription, settimerDescription] = useState("");
-  const [errorMessagetimerestInstruction, seterrorMessagetimerestInstruction] = useState("");
+  const [
+    errorMessagetimerestInstruction,
+    seterrorMessagetimerestInstruction,
+  ] = useState("");
   const [actualYoutubeLink, setActualYoutubeLink] = useState("");
   const [videoId, setVideoId] = useState("");
   const [TimerNameError, setTimerNameError] = useState("");
@@ -91,47 +94,6 @@ const Modalcall = (props) => {
   const [editingExerciseName, seteditingExerciseName] = useState(false);
   const [picked, setPicked] = useState(false);
   const [added, setAdded] = useState(false);
-
-
- 
-  const Item = SortableElement(({ item,index }) =>  
-  <div className="view">
-  <View
- key={index}
- id={index}
- data={item}
- onSelect={deleteItem}
- onEdit={callEdit}
- videoId={item.videoId}
- onCopy={callCopy}
- />
- </div>
- );
- const ItemContainer = SortableContainer(({ items }) => (
-   <ul>
-      {items.map((item, index) => (
-              
-              <Item key={index} index={index} item={item} />
-                 
-              
-      ))}
-   </ul>
- ));
-
-function toggleItemState(item) {
-  const updatedItems = Items.map(currentItem => ({
-    ...currentItem,
-    selected:
-      currentItem.name === item ? !currentItem.selected : currentItem.selected
-  }));
-
-  addList(updatedItems);
-}
-
-function onSortEnd({ oldIndex, newIndex }) {
-  const updatedItems = arrayMove(Items, oldIndex, newIndex);
-  addList(updatedItems);
-}
 
   // console.log(Data[0].key);
   // const [disablebutton,setDisablebutton]=useState(true);
@@ -191,7 +153,7 @@ function onSortEnd({ oldIndex, newIndex }) {
         setModalIsopen3(false);
         const items = Items;
         const mail = email;
-        
+
         // posting request here to server
         setModalIsopen4(true);
         ///////////////////////////////////////////////////
@@ -308,23 +270,6 @@ function onSortEnd({ oldIndex, newIndex }) {
     // setCopy([1]);
   };
 
-  const callEdit = (id) => {
-    setInstruction(Items[id].Instruction);
-    setTime(Items[id].time);
-    setRest(Items[id].rest);
-    setSets(Items[id].sets);
-    setPicked(true);
-    setAdded(true);
-    setVideoShow(true);
-    setName(Items[id].excerciseName);
-    setVideoId(Items[id].videoId);
-    setVideo(Items[id].video);
-    setResponse("");
-    setModalIsopen(true);
-    setUpdate(false);
-    passingId(id);
-  };
-
   const callCopy = (id) => {
     console.log(Items[id]);
     Items.splice(id + 1, 0, Items[id]);
@@ -336,11 +281,19 @@ function onSortEnd({ oldIndex, newIndex }) {
       noUpdate === true &&
       check(rest, time, Instruction, excerciseName, sets) === true
     ) {
-      
       addList((oldItems) => {
         return [
           ...oldItems,
-          { Instruction, time, rest, sets, excerciseName, video, videoId },
+          {
+            Instruction,
+            time,
+            rest,
+            sets,
+            excerciseName,
+            video,
+            videoId,
+            id: oldItems.length,
+          },
         ];
       });
       setModalIsopen(false);
@@ -368,6 +321,7 @@ function onSortEnd({ oldIndex, newIndex }) {
         excerciseName,
         video,
         videoId,
+        id: Items.length,
       });
       addList([...Items]);
       setInstruction("");
@@ -458,7 +412,9 @@ function onSortEnd({ oldIndex, newIndex }) {
       seterrorMessagetimerestInstruction("Exercise name can not be empty");
       return false;
     } else if (Instruction === "" && time === "") {
-      seterrorMessagetimerestInstruction("Please specify the Time and/or Instruction");
+      seterrorMessagetimerestInstruction(
+        "Please specify the Time and/or Instruction"
+      );
       return false;
     } else if (sets === "") {
       seterrorMessagetimerestInstruction("Please specify the Sets");
@@ -584,6 +540,95 @@ function onSortEnd({ oldIndex, newIndex }) {
     excerciseNameValue = excerciseName;
   }
 
+  // {Items.map((item, index) => {
+  //   return (
+  //     <div className="view">
+  //       <View
+  //         key={index}
+  //         id={index}
+  //         data={item}
+  //         onSelect={deleteItem}
+  //         onEdit={callEdit}
+  //         videoId={item.videoId}
+  //         onCopy={callCopy}
+  //       />
+  //     </div>
+  //   );
+
+  // })} */}
+
+  const callEdit = (id) => {
+    
+    setTime(Items[id].time);
+    setInstruction(Items[id].Instruction);
+    setRest(Items[id].rest);
+    setSets(Items[id].sets);
+    setPicked(true);
+    setAdded(true);
+    setVideoShow(true);
+    setName(Items[id].excerciseName);
+    setVideoId(Items[id].videoId);
+    setVideo(Items[id].video);
+    setResponse("");
+    setModalIsopen(true);
+    setUpdate(false);
+    passingId(id);
+  };
+
+  const Item = SortableElement(({ item, id }) => {
+    return (
+      <div className="view">
+        <Header>{id}</Header>
+        <View
+          key={id}
+          id={id}
+          data={item}
+          onSelect={deleteItem}
+          onEdit={callEdit}
+          videoId={item.videoId}
+          onCopy={callCopy}
+        />
+      </div>
+    );
+  });
+  const ItemContainer = SortableContainer(({ items }) => (
+    <Grid.Row style={{ marginLeft: "2.5%" }}>
+      <GridList spacing={20} cellHeight={320} cols="md">
+        {items.map((item, index) => (
+          <Item
+            key={"item-" + item.id}
+            item={item}
+            index={index}
+            id={item.id}
+          />
+        ))}
+        <Button
+          onClick={twomethod}
+          icon="add"
+          style={{
+            width: 150,
+            height: 150,
+            marginLeft: 100,
+            marginTop: 110,
+          }}
+        ></Button>
+      </GridList>
+    </Grid.Row>
+  ));
+
+  // function toggleItemState(item) {
+  //   const updatedItems = Items.map(currentItem => ({
+  //     ...currentItem,
+  //     selected:
+  //       currentItem.name === item ? !currentItem.selected : currentItem.selected
+  //   }));
+
+  //   addList(updatedItems);
+  // }
+  function onSortEnd({ oldIndex, newIndex }) {
+    const updatedItems = arrayMove(Items, oldIndex, newIndex);
+    addList(updatedItems);
+  }
 
   return (
     <div>
@@ -704,10 +749,9 @@ function onSortEnd({ oldIndex, newIndex }) {
                       control="input"
                       value={Instruction}
                       type="text"
-                      
                       onChange={(e) => {
-                        if(e.target.value.length<=60)
-                        setInstruction(e.target.value);
+                        if (e.target.value.length <= 60)
+                          setInstruction(e.target.value);
                       }}
                     />
                   </Grid.Column>
@@ -768,15 +812,14 @@ function onSortEnd({ oldIndex, newIndex }) {
         </Grid.Row>
 
         {/* /////////////////////////////////////// Card Print//////////////////////////////////////////////// */}
-        
+
         {/* <Grid.Row style={{ marginLeft: "2.5%" }}>
           <GridList spacing={20} cellHeight={320} cols="md">
            */}
-          
-          <ItemContainer items={Items} onSortEnd={onSortEnd} />
 
+        <ItemContainer items={Items} onSortEnd={onSortEnd} axis={"xy"} />
 
-            {/* {Items.map((item, index) => {
+        {/* {Items.map((item, index) => {
               return (
                 <div className="view">
                   <View
@@ -791,21 +834,21 @@ function onSortEnd({ oldIndex, newIndex }) {
                 </div>
               );
             })} */}
-            
-            <Button
-              onClick={twomethod}
-              icon="add"
-              style={{
-                width: 150,
-                height: 150,
-                marginLeft: 100,
-                marginTop: 110,
-              }}
-            ></Button>
-            
-          {/* </GridList>
+
+        {/* <Button
+          onClick={twomethod}
+          icon="add"
+          style={{
+            width: 150,
+            height: 150,
+            marginLeft: 100,
+            marginTop: 110,
+          }}
+        ></Button> */}
+
+        {/* </GridList>
         </Grid.Row> */}
-        
+
         {/* /////////////////////////////////////// Card Print//////////////////////////////////////////////// */}
 
         <Grid.Row>
