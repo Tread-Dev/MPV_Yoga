@@ -9,6 +9,7 @@ import ReactPlayer from "react-player";
 import { exercise } from "./Data.js";
 import DraggableList from "react-draggable-lists";
 import arrayMove from "array-move";
+import {Row,Container} from 'react-bootstrap';
 import {
   Dropdown,
   Popup,
@@ -24,6 +25,7 @@ import {
   Input,
   Label,
   Loader,
+  
 } from "semantic-ui-react";
 import DragList from "./DragAndDrop";
 import GridList from "@material-ui/core/GridList";
@@ -270,11 +272,7 @@ const Modalcall = (props) => {
     // setCopy([1]);
   };
 
-  const callCopy = (id) => {
-    console.log(Items[id]);
-    Items.splice(id + 1, 0, Items[id]);
-    addList([...Items]);
-  };
+ 
 
   const listOfItems = () => {
     if (
@@ -292,7 +290,7 @@ const Modalcall = (props) => {
             excerciseName,
             video,
             videoId,
-            id: oldItems.length,
+           
           },
         ];
       });
@@ -321,7 +319,7 @@ const Modalcall = (props) => {
         excerciseName,
         video,
         videoId,
-        id: Items.length,
+        
       });
       addList([...Items]);
       setInstruction("");
@@ -365,14 +363,7 @@ const Modalcall = (props) => {
     setVideoShow(true);
   };
 
-  const deleteItem = (id) => {
-    addList((oldItems) => {
-      return oldItems.filter((element, index) => {
-        return index !== id;
-      });
-    });
-  };
-
+ 
   ////////////////////////////////////////Youtube link and excercise name fields
 
   const closeModal = () => {
@@ -431,6 +422,8 @@ const Modalcall = (props) => {
   else {
     BuildWorkoutButtonAppear = (
       <div style={{ textAlign: "center" }} className="builderbutton">
+        <br></br>
+        <br></br>
         <Button
           style={{
             background: "#4DD599",
@@ -557,49 +550,106 @@ const Modalcall = (props) => {
 
   // })} */}
 
-  const callEdit = (id) => {
-    
-    setTime(Items[id].time);
-    setInstruction(Items[id].Instruction);
-    setRest(Items[id].rest);
-    setSets(Items[id].sets);
-    setPicked(true);
-    setAdded(true);
-    setVideoShow(true);
-    setName(Items[id].excerciseName);
-    setVideoId(Items[id].videoId);
-    setVideo(Items[id].video);
-    setResponse("");
-    setModalIsopen(true);
-    setUpdate(false);
-    passingId(id);
-  };
-
+  
   const Item = SortableElement(({ item, id }) => {
+
+    const callEdit = (e) => {
+      const id=e.target.getAttribute('id');
+      console.log("called for edit");
+      setTime(Items[id].time);
+      setInstruction(Items[id].Instruction);
+      setRest(Items[id].rest);
+      setSets(Items[id].sets);
+      setPicked(true);
+      setAdded(true);
+      setVideoShow(true);
+      setName(Items[id].excerciseName);
+      setVideoId(Items[id].videoId);
+      setVideo(Items[id].video);
+      setResponse("");
+      setModalIsopen(true);
+      setUpdate(false);
+      passingId(id);
+    };
+  
+    const deleteItem = (e) => {
+      const id=e.target.getAttribute('id');
+      console.log(id);
+      addList((oldItems) => {
+        return oldItems.filter((element, index) => {
+          return index !== id;
+        });
+      });
+    };
+  
+    const callCopy = (e) => {
+      const id=e.target.getAttribute('id');
+      console.log(Items[id]);
+      Items.splice(id + 1, 0, Items[id]);
+      addList([...Items]);
+    };
+  
     return (
+      
       <div className="view">
-        <Header>{id}</Header>
+        
+        <Container>
+        <Row>
+        <Button
+        icon="close"
+        id={id}
+        onClick={
+          deleteItem
+        }
+      ></Button>
+      <Button
+        icon="edit"
+        id={id}
+        onClick={
+          callEdit
+        }
+      ></Button>
+
+      <Button
+        icon="copy"
+        id={id}
+        onClick={
+          callCopy
+        }
+      ></Button>
+      </Row>
+      
+        <Row>
         <View
           key={id}
           id={id}
           data={item}
-          onSelect={deleteItem}
-          onEdit={callEdit}
+          // onSelect={deleteItem}
+          // onEdit={callEdit}
           videoId={item.videoId}
-          onCopy={callCopy}
+          // onCopy={callCopy}
         />
+        </Row>
+        </Container>
       </div>
+     
     );
   });
+
+
+
+
+  
   const ItemContainer = SortableContainer(({ items }) => (
-    <Grid.Row style={{ marginLeft: "2.5%" }}>
+    
+    <Grid.Row style={{ marginLeft: "2.5%"}}>
       <GridList spacing={20} cellHeight={320} cols="md">
         {items.map((item, index) => (
           <Item
-            key={"item-" + item.id}
+            key={"item-" + index}
             item={item}
             index={index}
-            id={item.id}
+            id={index}
           />
         ))}
         <Button
@@ -614,6 +664,7 @@ const Modalcall = (props) => {
         ></Button>
       </GridList>
     </Grid.Row>
+    
   ));
 
   // function toggleItemState(item) {
@@ -764,6 +815,7 @@ const Modalcall = (props) => {
 
             <Grid.Row>
               <div className="builderbutton">
+
                 <Button
                   type="submit"
                   onClick={listOfItems}
@@ -853,6 +905,8 @@ const Modalcall = (props) => {
 
         <Grid.Row>
           <Grid.Column style={{ textAlign: "center" }}>
+            <br/>
+            <br/>
             {BuildWorkoutButtonAppear}
           </Grid.Column>
         </Grid.Row>

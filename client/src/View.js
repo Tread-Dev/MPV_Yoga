@@ -27,7 +27,7 @@ const View = (props) => {
 
   return (
     <div>
-      <Button
+      {/* <Button
         icon="close"
         onClick={() => {
           props.onSelect(props.id);
@@ -45,7 +45,7 @@ const View = (props) => {
         onClick={() => {
           props.onCopy(props.id);
         }}
-      ></Button>
+      ></Button> */}
 
       <Card>
         <Card.Content>
@@ -75,8 +75,8 @@ const View = (props) => {
             <span className="data" style={{marginLeft:"4px"}}>{props.data.sets}</span>
             <span className="unit">{setsunit}</span>
           </div>
-          <div><span className="data" style={{marginLeft:"4px"}}>{props.data.Instruction}</span></div>
-          <div><span className="data" style={{marginLeft:"4px"}}>{"ID "+ props.id }</span></div>
+          <span className="data" style={{marginLeft:"4px"}}>{props.data.Instruction}</span>
+          {/* <div><span className="data" style={{marginLeft:"4px"}}>{"ID "+ props.id }</span></div> */}
 
           {/* <br /> */}
         </Card.Content>
