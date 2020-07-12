@@ -677,8 +677,9 @@ const Modalcall = (props) => {
   //   addList(updatedItems);
   // }
 
-  const areEqual = (prevProps, nextProps) => true;
-  const ListView = React.memo(props => {
+
+  const ListView=()=>{
+
     return(
       
 
@@ -745,76 +746,7 @@ const Modalcall = (props) => {
      
      
     )
-  }, areEqual);
-  // const ListView=()=>{
-
-  //   return(
-      
-
-  //     <Grid.Row style={{ marginLeft: "2.5%"}}> 
-  //      <GridList spacing={50} cellHeight={320} cols="md">  
-     
-  //     <DraggableList width={350} height={350} rowSize={4} >
-     
-      
-  //     {Items.map((item,index) => {
-  //       return (
-  //         <div className="view">
-        
-  //       <Container>
-  //       <Row>
-  //         {index}
-  //       <Button
-  //       icon="close"
-  //       id={index}
-  //       onClick={
-  //         deleteItem
-  //       }
-  //     ></Button>
-  //     <Button
-  //       icon="edit"
-  //       id={index}
-  //       onClick={
-  //         callEdit
-  //       }
-  //     ></Button>
-
-  //     <Button
-  //       icon="copy"
-  //       id={index}
-  //       onClick={
-  //         callCopy
-  //       }
-  //     ></Button>
-  //     </Row>
-      
-  //       <Row>
-  //       <View
-  //         key={index}
-  //         id={index}
-  //         data={item}
-  //         // onSelect={deleteItem}
-  //         // onEdit={callEdit}
-  //         videoId={item.videoId}
-  //         // onCopy={callCopy}
-  //       />
-  //       </Row>
-       
-  //       </Container>
-  //     </div>
-  //       );
-  //     })} 
-       
-     
-  //     </DraggableList>
-     
-  //    </GridList>
-      
-  //      </Grid.Row>
-     
-     
-  //   )
-  // }
+  }
 
   return (
     <div>
