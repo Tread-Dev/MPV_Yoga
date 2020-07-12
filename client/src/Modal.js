@@ -290,6 +290,7 @@ const Modalcall = (props) => {
             excerciseName,
             video,
             videoId,
+            id:oldItems.length
            
           },
         ];
@@ -319,6 +320,7 @@ const Modalcall = (props) => {
         excerciseName,
         video,
         videoId,
+        id:ID
         
       });
       addList([...Items]);
@@ -551,60 +553,158 @@ const Modalcall = (props) => {
   // })} */}
 
   
-  const Item = SortableElement(({ item, id }) => {
+  const callEdit = (e) => {
+    const id=e.target.getAttribute('id');
+    console.log("called for edit");
+    setTime(Items[id].time);
+    setInstruction(Items[id].Instruction);
+    setRest(Items[id].rest);
+    setSets(Items[id].sets);
+    setPicked(true);
+    setAdded(true);
+    setVideoShow(true);
+    setName(Items[id].excerciseName);
+    setVideoId(Items[id].videoId);
+    setVideo(Items[id].video);
+    setResponse("");
+    setModalIsopen(true);
+    setUpdate(false);
+    passingId(id);
+  };
 
-    const callEdit = (e) => {
-      const id=e.target.getAttribute('id');
-      console.log("called for edit");
-      setTime(Items[id].time);
-      setInstruction(Items[id].Instruction);
-      setRest(Items[id].rest);
-      setSets(Items[id].sets);
-      setPicked(true);
-      setAdded(true);
-      setVideoShow(true);
-      setName(Items[id].excerciseName);
-      setVideoId(Items[id].videoId);
-      setVideo(Items[id].video);
-      setResponse("");
-      setModalIsopen(true);
-      setUpdate(false);
-      passingId(id);
-    };
-  
-    const deleteItem = (e) => {
-      const id=e.target.getAttribute('id');
-      console.log(id);
-      addList((oldItems) => {
-        return oldItems.filter((element, index) => {
-          return index !== id;
-        });
+  const deleteItem = (e) => {
+    const id=e.target.getAttribute('id');
+    console.log(id);
+    addList((oldItems) => {
+      return oldItems.filter((element, index) => {
+        return index !== id;
       });
-    };
-  
-    const callCopy = (e) => {
-      const id=e.target.getAttribute('id');
-      console.log(Items[id]);
-      Items.splice(id + 1, 0, Items[id]);
-      addList([...Items]);
-    };
-  
-    return (
+    });
+  };
+
+  const callCopy = (e) => {
+    const id=e.target.getAttribute('id');
+    // console.log(Items[id]);
+    
+    Items.splice(id + 1, 0, Items[id]);
+    
+    console.log(Items.length);
+    addList([...Items]);
+  };
+
+  // const Item = SortableElement(({ item, id }) => {
+
+  //   return (
       
-      <div className="view">
+  //     <div className="view">
+        
+  //       <Container>
+  //       <Row>
+  //       <Button
+  //       icon="close"
+  //       id={id}
+  //       onClick={
+  //         deleteItem
+  //       }
+  //     ></Button>
+  //     <Button
+  //       icon="edit"
+  //       id={id}
+  //       onClick={
+  //         callEdit
+  //       }
+  //     ></Button>
+
+  //     <Button
+  //       icon="copy"
+  //       id={id}
+  //       onClick={
+  //         callCopy
+  //       }
+  //     ></Button>
+  //     </Row>
+      
+  //       <Row>
+  //       <View
+  //         key={id}
+  //         id={id}
+  //         data={item}
+  //         onSelect={deleteItem}
+  //         onEdit={callEdit}
+  //         videoId={item.videoId}
+  //         onCopy={callCopy}
+  //       />
+  //       </Row>
+  //       </Container>
+  //     </div>
+     
+  //   );
+  // });
+
+
+
+
+  
+  // const ItemContainer = SortableContainer(({ items }) => (
+    
+  //   <Grid.Row style={{ marginLeft: "2.5%"}}>
+  //     <GridList spacing={20} cellHeight={320} cols="md">
+  //       {items.map((item, index) => (
+  //         <Item
+  //           key={"item-" + index}
+  //           item={item}
+  //           index={index}
+  //           id={index}
+  //         />
+  //       ))}
+  //       <Button
+  //         onClick={twomethod}
+  //         icon="add"
+  //         style={{
+  //           width: 150,
+  //           height: 150,
+  //           marginLeft: 100,
+  //           marginTop: 110,
+  //         }}
+  //       ></Button>
+  //     </GridList>
+  //   </Grid.Row>
+    
+  // ));
+
+  // function onSortEnd({ oldIndex, newIndex }) {
+  //   const updatedItems = arrayMove(Items, oldIndex, newIndex);
+  //   addList(updatedItems);
+  // }
+
+  const areEqual = (prevProps, nextProps) => true;
+  const ListView = React.memo(props => {
+    return(
+      
+
+      <Grid.Row style={{ marginLeft: "2.5%"}}> 
+       <GridList spacing={50} cellHeight={320} cols="md">  
+     
+      <DraggableList width={350} height={350} rowSize={4} >
+     
+      
+      {Items.map((item,index) => {
+        return (
+          <div className="view">
         
         <Container>
         <Row>
+          {index}
         <Button
         icon="close"
-        id={id}
+        id={index}
         onClick={
           deleteItem
         }
       ></Button>
       <Button
         icon="edit"
-        id={id}
+        id={index}
         onClick={
           callEdit
         }
@@ -612,7 +712,7 @@ const Modalcall = (props) => {
 
       <Button
         icon="copy"
-        id={id}
+        id={index}
         onClick={
           callCopy
         }
@@ -621,8 +721,8 @@ const Modalcall = (props) => {
       
         <Row>
         <View
-          key={id}
-          id={id}
+          key={index}
+          id={index}
           data={item}
           // onSelect={deleteItem}
           // onEdit={callEdit}
@@ -630,56 +730,91 @@ const Modalcall = (props) => {
           // onCopy={callCopy}
         />
         </Row>
+       
         </Container>
       </div>
+        );
+      })} 
+       
      
-    );
-  });
+      </DraggableList>
+     
+     </GridList>
+      
+       </Grid.Row>
+     
+     
+    )
+  }, areEqual);
+  // const ListView=()=>{
 
+  //   return(
+      
 
+  //     <Grid.Row style={{ marginLeft: "2.5%"}}> 
+  //      <GridList spacing={50} cellHeight={320} cols="md">  
+     
+  //     <DraggableList width={350} height={350} rowSize={4} >
+     
+      
+  //     {Items.map((item,index) => {
+  //       return (
+  //         <div className="view">
+        
+  //       <Container>
+  //       <Row>
+  //         {index}
+  //       <Button
+  //       icon="close"
+  //       id={index}
+  //       onClick={
+  //         deleteItem
+  //       }
+  //     ></Button>
+  //     <Button
+  //       icon="edit"
+  //       id={index}
+  //       onClick={
+  //         callEdit
+  //       }
+  //     ></Button>
 
-
-  
-  const ItemContainer = SortableContainer(({ items }) => (
-    
-    <Grid.Row style={{ marginLeft: "2.5%"}}>
-      <GridList spacing={20} cellHeight={320} cols="md">
-        {items.map((item, index) => (
-          <Item
-            key={"item-" + index}
-            item={item}
-            index={index}
-            id={index}
-          />
-        ))}
-        <Button
-          onClick={twomethod}
-          icon="add"
-          style={{
-            width: 150,
-            height: 150,
-            marginLeft: 100,
-            marginTop: 110,
-          }}
-        ></Button>
-      </GridList>
-    </Grid.Row>
-    
-  ));
-
-  // function toggleItemState(item) {
-  //   const updatedItems = Items.map(currentItem => ({
-  //     ...currentItem,
-  //     selected:
-  //       currentItem.name === item ? !currentItem.selected : currentItem.selected
-  //   }));
-
-  //   addList(updatedItems);
+  //     <Button
+  //       icon="copy"
+  //       id={index}
+  //       onClick={
+  //         callCopy
+  //       }
+  //     ></Button>
+  //     </Row>
+      
+  //       <Row>
+  //       <View
+  //         key={index}
+  //         id={index}
+  //         data={item}
+  //         // onSelect={deleteItem}
+  //         // onEdit={callEdit}
+  //         videoId={item.videoId}
+  //         // onCopy={callCopy}
+  //       />
+  //       </Row>
+       
+  //       </Container>
+  //     </div>
+  //       );
+  //     })} 
+       
+     
+  //     </DraggableList>
+     
+  //    </GridList>
+      
+  //      </Grid.Row>
+     
+     
+  //   )
   // }
-  function onSortEnd({ oldIndex, newIndex }) {
-    const updatedItems = arrayMove(Items, oldIndex, newIndex);
-    addList(updatedItems);
-  }
 
   return (
     <div>
@@ -865,11 +1000,13 @@ const Modalcall = (props) => {
 
         {/* /////////////////////////////////////// Card Print//////////////////////////////////////////////// */}
 
-        {/* <Grid.Row style={{ marginLeft: "2.5%" }}>
+        <Grid.Row style={{ marginLeft: "2.5%" }}>
           <GridList spacing={20} cellHeight={320} cols="md">
-           */}
+          
 
-        <ItemContainer items={Items} onSortEnd={onSortEnd} axis={"xy"} />
+        {/* <ItemContainer items={Items} onSortEnd={onSortEnd} axis={"xy"} /> */}
+        
+        <ListView/>
 
         {/* {Items.map((item, index) => {
               return (
@@ -887,7 +1024,7 @@ const Modalcall = (props) => {
               );
             })} */}
 
-        {/* <Button
+        <Button
           onClick={twomethod}
           icon="add"
           style={{
@@ -896,10 +1033,10 @@ const Modalcall = (props) => {
             marginLeft: 100,
             marginTop: 110,
           }}
-        ></Button> */}
+        ></Button>
 
-        {/* </GridList>
-        </Grid.Row> */}
+        </GridList>
+        </Grid.Row>
 
         {/* /////////////////////////////////////// Card Print//////////////////////////////////////////////// */}
 
