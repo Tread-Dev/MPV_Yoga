@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,memo } from "react";
 import "./Modal.css";
 import View from "./View";
 import axios from "axios";
@@ -677,12 +677,10 @@ const Modalcall = (props) => {
   //   addList(updatedItems);
   // }
 
-
-  const ListView=()=>{
-
+  
+  const ListView=memo(function ListView(){
+    console.log("rendering");
     return(
-      
-
       <Grid.Row style={{ marginLeft: "2.5%"}}> 
        <GridList spacing={50} cellHeight={320} cols="md">  
      
@@ -698,7 +696,7 @@ const Modalcall = (props) => {
           {index}
         <Button
         icon="close"
-        id={index}
+        id={item.id}
         onClick={
           deleteItem
         }
@@ -743,10 +741,11 @@ const Modalcall = (props) => {
      </GridList>
       
        </Grid.Row>
-     
-     
     )
-  }
+  })
+
+
+
 
   return (
     <div>
