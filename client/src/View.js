@@ -4,7 +4,7 @@ import ReactPlayer from "react-player";
 import "./Modal.css";
 import "./App.css";
 import Plyr from "react-plyr";
-
+////////////////////////////////////////// card view component ////////////////////////////////////////////////
 const View = (props) => {
   var 
   // repsunit = null,
@@ -48,6 +48,7 @@ const View = (props) => {
       ></Button> */}
 
       <Card>
+       
         <Card.Content>
           <div className="title">{props.data.excerciseName}</div>
         </Card.Content>
@@ -86,3 +87,4 @@ const View = (props) => {
 };
 
 export default View;
+////////////////////////////////////////// card view component ////////////////////////////////////////////////

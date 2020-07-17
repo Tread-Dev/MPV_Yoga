@@ -1,4 +1,4 @@
-import React, { useState, useEffect,memo } from "react";
+import React, { useState, useEffect, memo } from "react";
 import "./Modal.css";
 import View from "./View";
 import axios from "axios";
@@ -9,7 +9,7 @@ import ReactPlayer from "react-player";
 import { exercise } from "./Data.js";
 import DraggableList from "react-draggable-lists";
 import arrayMove from "array-move";
-import {Row,Container} from 'react-bootstrap';
+import { Row, Container } from "react-bootstrap";
 import {
   Dropdown,
   Popup,
@@ -25,16 +25,11 @@ import {
   Input,
   Label,
   Loader,
-  
 } from "semantic-ui-react";
 import DragList from "./DragAndDrop";
 import GridList from "@material-ui/core/GridList";
 import { SortableElement, SortableContainer } from "react-sortable-hoc";
 
-// import { DndProvider } from "react-dnd";
-// import { HTML5Backend } from "react-dnd-html5-backend";
-
-// import DragDrop from "./DragAndDrop";
 
 const style = {
   content: {
@@ -55,6 +50,7 @@ const style1 = {
     right: "auto",
   },
 };
+
 
 const Modalcall = (props) => {
   // const [copyItems, setCopy] = useState([1, 2, 3]);
@@ -97,10 +93,52 @@ const Modalcall = (props) => {
   const [picked, setPicked] = useState(false);
   const [added, setAdded] = useState(false);
 
-  // console.log(Data[0].key);
-  // const [disablebutton,setDisablebutton]=useState(true);
+  ///////////////////////// Drag And Drop ///////////////////////////////////
+  const Item = SortableElement(({ item, id }) => {
+  
+    return (
+      <div className="view">
+        <Container>
+          <Row>
+            <Button icon="close" id={id} onClick={deleteItem}></Button>
+            <Button icon="edit" id={id} onClick={callEdit}></Button>
+  
+            <Button icon="copy" id={id} onClick={callCopy}></Button>
+          </Row>
+  
+          <Row>
+            <View
+              key={id}
+              id={id}
+              data={item}
+              // onSelect={deleteItem}
+              // onEdit={callEdit}
+              videoId={item.videoId}
+              // onCopy={callCopy}
+            />
+          </Row>
+        </Container>
+      </div>
+    );
+  });
+  
+  const ItemContainer = SortableContainer(({ items }) => (
+    <Grid>
+      {/* <Grid.Row style={{ marginLeft: "2.5%"}}> */}
+  
+      <GridList spacing={20} cellHeight={320} cols="md" marginTop={20}>
+        {items.map((item, index) => (
+          <Item key={"item-" + index} item={item} index={index} id={index} />
+        ))}
+      </GridList>
+  
+      {/* </Grid.Row> */}
+    </Grid>
+  ));
 
-  // All items submit to db modal
+///////////////////////// Drag And Drop ///////////////////////////////////
+
+//////////////////////// Mail send modal ////////////////////////////////////
   const Modal4 = () => {
     return (
       <Modal
@@ -146,7 +184,9 @@ const Modalcall = (props) => {
       </Modal>
     );
   };
+//////////////////////// Mail send modal ////////////////////////////////////
 
+//////////////////////// buildwork to send mail /////////////////////////////
   const BuildWorkout = () => {
     const [email, setEmail] = useState("");
 
@@ -250,6 +290,7 @@ const Modalcall = (props) => {
       </div>
     );
   };
+//////////////////////// buildwork to send mail /////////////////////////////
 
   const twomethod = () => {
     setRest("0");
@@ -272,8 +313,8 @@ const Modalcall = (props) => {
     // setCopy([1]);
   };
 
- 
 
+////////////////////////////// Adding Item to arraylist /////////////////////
   const listOfItems = () => {
     if (
       noUpdate === true &&
@@ -290,8 +331,7 @@ const Modalcall = (props) => {
             excerciseName,
             video,
             videoId,
-            id:oldItems.length
-           
+            id: oldItems.length,
           },
         ];
       });
@@ -320,8 +360,7 @@ const Modalcall = (props) => {
         excerciseName,
         video,
         videoId,
-        id:ID
-        
+        id: ID,
       });
       addList([...Items]);
       setInstruction("");
@@ -341,6 +380,10 @@ const Modalcall = (props) => {
       seteditingExerciseName(false);
     }
   };
+////////////////////////////// Adding Item to arraylist /////////////////////
+
+
+////////////////////////////// youtube link vecrification to update video//////////////////
   const YoutubeUrlChange1 = (link) => {
     if (matchYoutubeUrl(link) === false) {
       setErrorUrlMessage("Invalid Youtube Url Link");
@@ -365,91 +408,6 @@ const Modalcall = (props) => {
     setVideoShow(true);
   };
 
- 
-  ////////////////////////////////////////Youtube link and excercise name fields
-
-  const closeModal = () => {
-    setInstruction("");
-    setTime("");
-    setRest("");
-    setAdded(false);
-    setPicked(false);
-    setName("");
-    setSets("");
-    setLink("");
-    setVideo("");
-    setVideoShow(false);
-    setActualYoutubeLink("");
-    setUpdate(true);
-    seterrorMessagetimerestInstruction("");
-    setModalIsopen(false);
-    setResponse("");
-
-    seteditingExerciseName(false);
-    setExerName("");
-  };
-
-  const closeSecondModal = () => {
-    setModalIsopen2(false);
-    setExerName("");
-    setAdded(false);
-    // setName("");
-  };
-
-  // const getFile = (e) => {
-  //   document.getElementById("file").click();
-  // };
-
-  function check(rest, time, Instruction, sets, excerciseName) {
-    if (excerciseName === "") {
-      seterrorMessagetimerestInstruction("Exercise name can not be empty");
-      return false;
-    } else if (Instruction === "" && time === "") {
-      seterrorMessagetimerestInstruction(
-        "Please specify the Time and/or Instruction"
-      );
-      return false;
-    } else if (sets === "") {
-      seterrorMessagetimerestInstruction("Please specify the Sets");
-      return false;
-    } else if (rest === "") {
-      seterrorMessagetimerestInstruction("Please specify the Rest");
-      return false;
-    }
-    return true;
-  }
-
-  var BuildWorkoutButtonAppear;
-  if (Items.length === 0) BuildWorkoutButtonAppear = null;
-  else {
-    BuildWorkoutButtonAppear = (
-      <div style={{ textAlign: "center" }} className="builderbutton">
-        <br></br>
-        <br></br>
-        <Button
-          style={{
-            background: "#4DD599",
-            borderRadius: "4px",
-            color: "white",
-            boxShadow: "0px 4px 10px rgba(16, 156, 241, 0.24)",
-          }}
-          onClick={(e) => {
-            if (timerName !== "") {
-              setModalIsopen3(true);
-              setTimerNameError("");
-              setResponse("");
-            } else {
-              setTimerNameError("Please enter a name for your workout!");
-              setResponse("");
-            }
-          }}
-        >
-          Build the workout
-        </Button>
-        <BuildWorkout />
-      </div>
-    );
-  }
   function matchYoutubeUrl(url) {
     var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     if (url.match(p)) {
@@ -484,6 +442,99 @@ const Modalcall = (props) => {
     }
   };
 
+  ////////////////////////////////////////Youtube link and excercise name fields
+
+
+  //////////////// close  of main plus icon modal  ////////////////
+  const closeModal = () => {
+    setInstruction("");
+    setTime("");
+    setRest("");
+    setAdded(false);
+    setPicked(false);
+    setName("");
+    setSets("");
+    setLink("");
+    setVideo("");
+    setVideoShow(false);
+    setActualYoutubeLink("");
+    setUpdate(true);
+    seterrorMessagetimerestInstruction("");
+    setModalIsopen(false);
+    setResponse("");
+
+    seteditingExerciseName(false);
+    setExerName("");
+  };
+ //////////////// close  of main plus icon modal ////////////////
+
+ ///////////////// close add youtube link modal ////////////////
+  const closeSecondModal = () => {
+    setModalIsopen2(false);
+    setExerName("");
+    setAdded(false);
+    // setName("");
+  };
+ ///////////////// close add youtube link modal ////////////////
+ 
+///////////////////// validation ///////////////////////////////
+  function check(rest, time, Instruction, sets, excerciseName) {
+    if (excerciseName === "") {
+      seterrorMessagetimerestInstruction("Exercise name can not be empty");
+      return false;
+    } else if (Instruction === "" && time === "") {
+      seterrorMessagetimerestInstruction(
+        "Please specify the Time and/or Instruction"
+      );
+      return false;
+    } else if (sets === "") {
+      seterrorMessagetimerestInstruction("Please specify the Sets");
+      return false;
+    } else if (rest === "") {
+      seterrorMessagetimerestInstruction("Please specify the Rest");
+      return false;
+    }
+    return true;
+  }
+///////////////////// validation ///////////////////////////////
+
+///////////////////// buildworkout button appear when we have one item in list///////////////////////
+  var BuildWorkoutButtonAppear;
+  if (Items.length === 0) BuildWorkoutButtonAppear = null;
+  else {
+    BuildWorkoutButtonAppear = (
+      <div style={{ textAlign: "center" }} className="builderbutton">
+        <br></br>
+        <br></br>
+        <Button
+          style={{
+            background: "#4DD599",
+            borderRadius: "4px",
+            color: "white",
+            boxShadow: "0px 4px 10px rgba(16, 156, 241, 0.24)",
+          }}
+          onClick={(e) => {
+            if (timerName !== "") {
+              setModalIsopen3(true);
+              setTimerNameError("");
+              setResponse("");
+            } else {
+              setTimerNameError("Please enter a name for your workout!");
+              setResponse("");
+            }
+          }}
+        >
+          Build the workout
+        </Button>
+        <BuildWorkout />
+      </div>
+    );
+  }
+
+  ///////////////////// buildworkout button appear when we have one item in list///////////////////////
+ 
+
+//////////////////////// video appear when we select exercise from dropdown ///////////////////////////
   var Embedvideo = null;
 
   if (picked === true || added === true) {
@@ -500,27 +551,11 @@ const Modalcall = (props) => {
       />
     );
   }
-  // var embedvideo;
-  //  if(editingExerciseName===true||excerciseName!=="" && ) {
-  //   embedvideo = (
-  //     <Embed
-  //       id={videoId}
-  //       source="youtube"
-  //       iframe={{
-  //         allowFullScreen: true,
+ 
+//////////////////////// video appear when we select exercise from dropdown ///////////////////////////
 
-  //         // autoplay:true
-  //       }}
-  //       active={true}
-  //     />
-  //   );
-  // }
-  // else if (excerciseName === "") {
-  //   embedvideo = null;
-  // }
 
-  ///// main return
-
+////////////////////// validation in add your youbuelink modal//////////////////////////////////////////
   const ExerName = (e) => {
     setErrorUrlMessage("");
     setExerName(e.target.value);
@@ -535,26 +570,12 @@ const Modalcall = (props) => {
     excerciseNameValue = excerciseName;
   }
 
-  // {Items.map((item, index) => {
-  //   return (
-  //     <div className="view">
-  //       <View
-  //         key={index}
-  //         id={index}
-  //         data={item}
-  //         onSelect={deleteItem}
-  //         onEdit={callEdit}
-  //         videoId={item.videoId}
-  //         onCopy={callCopy}
-  //       />
-  //     </div>
-  //   );
+////////////////////// validation in add your youbuelink modal//////////////////////////////////////////
 
-  // })} */}
 
-  
+///////////////////// edit specific workout card /////////////////////////////////////////////////////
   const callEdit = (e) => {
-    const id=e.target.getAttribute('id');
+    const id = e.target.getAttribute("id");
     console.log("called for edit");
     setTime(Items[id].time);
     setInstruction(Items[id].Instruction);
@@ -572,181 +593,47 @@ const Modalcall = (props) => {
     passingId(id);
   };
 
+///////////////////// edit specific workout card /////////////////////////////////////////////////////
+
+///////////////////// delete specific workout card /////////////////////////////////////////////////////
   const deleteItem = (e) => {
-    const id=e.target.getAttribute('id');
+    const id = e.target.getAttribute("id");
     console.log(id);
+    
     addList((oldItems) => {
+
       return oldItems.filter((element, index) => {
         return index !== id;
       });
     });
   };
+  
+///////////////////// delete specific workout card /////////////////////////////////////////////////////
 
+///////////////////// copy specific workout card /////////////////////////////////////////////////////
   const callCopy = (e) => {
-    const id=e.target.getAttribute('id');
+    const id = e.target.getAttribute("id");
     // console.log(Items[id]);
-    
+
     Items.splice(id + 1, 0, Items[id]);
-    
+
     console.log(Items.length);
     addList([...Items]);
   };
-
-  // const Item = SortableElement(({ item, id }) => {
-
-  //   return (
-      
-  //     <div className="view">
-        
-  //       <Container>
-  //       <Row>
-  //       <Button
-  //       icon="close"
-  //       id={id}
-  //       onClick={
-  //         deleteItem
-  //       }
-  //     ></Button>
-  //     <Button
-  //       icon="edit"
-  //       id={id}
-  //       onClick={
-  //         callEdit
-  //       }
-  //     ></Button>
-
-  //     <Button
-  //       icon="copy"
-  //       id={id}
-  //       onClick={
-  //         callCopy
-  //       }
-  //     ></Button>
-  //     </Row>
-      
-  //       <Row>
-  //       <View
-  //         key={id}
-  //         id={id}
-  //         data={item}
-  //         onSelect={deleteItem}
-  //         onEdit={callEdit}
-  //         videoId={item.videoId}
-  //         onCopy={callCopy}
-  //       />
-  //       </Row>
-  //       </Container>
-  //     </div>
-     
-  //   );
-  // });
-
-
-
-
   
-  // const ItemContainer = SortableContainer(({ items }) => (
-    
-  //   <Grid.Row style={{ marginLeft: "2.5%"}}>
-  //     <GridList spacing={20} cellHeight={320} cols="md">
-  //       {items.map((item, index) => (
-  //         <Item
-  //           key={"item-" + index}
-  //           item={item}
-  //           index={index}
-  //           id={index}
-  //         />
-  //       ))}
-  //       <Button
-  //         onClick={twomethod}
-  //         icon="add"
-  //         style={{
-  //           width: 150,
-  //           height: 150,
-  //           marginLeft: 100,
-  //           marginTop: 110,
-  //         }}
-  //       ></Button>
-  //     </GridList>
-  //   </Grid.Row>
-    
-  // ));
+///////////////////// copy specific workout card /////////////////////////////////////////////////////
 
-  // function onSortEnd({ oldIndex, newIndex }) {
-  //   const updatedItems = arrayMove(Items, oldIndex, newIndex);
-  //   addList(updatedItems);
-  // }
 
+///////////////////// drag and drop specific workout card /////////////////////////////////////////////////////
+  function onSortEnd({ oldIndex, newIndex }) {
+    const updatedItems = arrayMove(Items, oldIndex, newIndex);
+    addList(updatedItems);
+  }
   
-  const ListView=memo(function ListView(){
-    console.log("rendering");
-    return(
-      <Grid.Row style={{ marginLeft: "2.5%"}}> 
-       <GridList spacing={50} cellHeight={320} cols="md">  
-     
-      <DraggableList width={350} height={350} rowSize={4} >
-     
-      
-      {Items.map((item,index) => {
-        return (
-          <div className="view">
-        
-        <Container>
-        <Row>
-          {index}
-        <Button
-        icon="close"
-        id={item.id}
-        onClick={
-          deleteItem
-        }
-      ></Button>
-      <Button
-        icon="edit"
-        id={index}
-        onClick={
-          callEdit
-        }
-      ></Button>
-
-      <Button
-        icon="copy"
-        id={index}
-        onClick={
-          callCopy
-        }
-      ></Button>
-      </Row>
-      
-        <Row>
-        <View
-          key={index}
-          id={index}
-          data={item}
-          // onSelect={deleteItem}
-          // onEdit={callEdit}
-          videoId={item.videoId}
-          // onCopy={callCopy}
-        />
-        </Row>
-       
-        </Container>
-      </div>
-        );
-      })} 
-       
-     
-      </DraggableList>
-     
-     </GridList>
-      
-       </Grid.Row>
-    )
-  })
+///////////////////// drag and drop  specific workout card /////////////////////////////////////////////////////
 
 
-
-
+//////////////////////// return to webpage ///////////////////////////////////////////////////////////////////
   return (
     <div>
       <Modal
@@ -881,7 +768,6 @@ const Modalcall = (props) => {
 
             <Grid.Row>
               <div className="builderbutton">
-
                 <Button
                   type="submit"
                   onClick={listOfItems}
@@ -898,6 +784,7 @@ const Modalcall = (props) => {
       </Modal>
 
       <Grid>
+        {/* ////////////////////////////////////// timer Name editable text segment //////////////////////////////// */}
         <Grid.Row style={{ marginLeft: "6%", marginRight: "6%" }}>
           <Header style={{ color: "red" }}>{TimerNameError}</Header>
 
@@ -928,18 +815,38 @@ const Modalcall = (props) => {
             </Segment>
           </Segment.Group>
         </Grid.Row>
+        {/* ////////////////////////////////////// timer Name editable text segment //////////////////////////////// */}
+
 
         {/* /////////////////////////////////////// Card Print//////////////////////////////////////////////// */}
 
         <Grid.Row style={{ marginLeft: "2.5%" }}>
-          <GridList spacing={20} cellHeight={320} cols="md">
-          
+          {/* <GridList spacing={20} cellHeight={320} cols="md"> */}
 
-        {/* <ItemContainer items={Items} onSortEnd={onSortEnd} axis={"xy"} /> */}
-        
-        <ListView/>
+          <br />
+          <br />
+          <br />
+          <br />
+          {/* ///////////////////// Item container called for drag and drop ///////////////////////////// */}
+          <ItemContainer items={Items} onSortEnd={onSortEnd} axis={"xy"} />
+          {/* ///////////////////// Item container called for drag and drop ///////////////////////////// */}
 
-        {/* {Items.map((item, index) => {
+          {/* //////////////////////////////// plus icon button ////////////////////////////////////////////// */}
+          <Button
+            onClick={twomethod}
+            icon="add"
+            style={{
+              width: 150,
+              height: 150,
+              marginLeft: 100,
+              marginTop: 110,
+            }}
+          ></Button>
+          {/* //////////////////////////////// plus icon button ////////////////////////////////////////////// */}
+
+          {/* <ListView data={Items}/> */}
+          {/* <DragList data={Items}/> */}
+          {/* {Items.map((item, index) => {
               return (
                 <div className="view">
                   <View
@@ -955,7 +862,7 @@ const Modalcall = (props) => {
               );
             })} */}
 
-        <Button
+          {/* <Button
           onClick={twomethod}
           icon="add"
           style={{
@@ -964,21 +871,24 @@ const Modalcall = (props) => {
             marginLeft: 100,
             marginTop: 110,
           }}
-        ></Button>
+        ></Button> */}
 
-        </GridList>
+          {/* </GridList> */}
         </Grid.Row>
 
         {/* /////////////////////////////////////// Card Print//////////////////////////////////////////////// */}
 
+        {/* ////////////////////////////////// buildworkout button appear /////////////////////////////////////// */}
         <Grid.Row>
           <Grid.Column style={{ textAlign: "center" }}>
-            <br/>
-            <br/>
+            <br />
+            <br />
             {BuildWorkoutButtonAppear}
           </Grid.Column>
         </Grid.Row>
+        {/* ////////////////////////////////// buildworkout button appear /////////////////////////////////////// */}
 
+        {/* ////////////////////////////////////// add youtubelink modal //////////////////////////////////////// */}
         <Modal
           closeIcon
           onClose={closeSecondModal}
@@ -1071,6 +981,7 @@ const Modalcall = (props) => {
             </Grid>
           </Form>
         </Modal>
+        {/* ////////////////////////////////////// add youtubelink modal //////////////////////////////////////// */}
       </Grid>
     </div>
   );

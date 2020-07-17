@@ -17,8 +17,8 @@ function App() {
   
      
       <Modal/>
-          
-      {/* <DragList/> */}
+{/*           
+      <DragList/> */}
       
     </div>
   );
